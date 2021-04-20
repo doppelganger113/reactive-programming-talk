@@ -39,21 +39,6 @@ public class Main {
     @SneakyThrows
     public static void main(String[] args) {
         printThread("Started");
-
-        Flux.just(1, 2, 3, 4, 5)
-//            .subscribeOn(Schedulers.parallel())
-            .subscribeOn(Schedulers.fromExecutorService(getThreadPool()))
-            .delayElements(Duration.ofSeconds(1))
-            .map(x -> {
-                printThread(x);
-                return x;
-            })
-            .filter(num -> num % 2 == 0)
-            .subscribe(System.out::println);
-
-        printThread("Waiting...");
-        Thread.sleep(6_000);
-        printThread("Completed");
     }
 
     // Not encouraged
@@ -61,3 +46,34 @@ public class Main {
         return Executors.newWorkStealingPool();
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//        Flux.just(1, 2, 3, 4, 5)
+////            .subscribeOn(Schedulers.parallel())
+//            .subscribeOn(Schedulers.fromExecutorService(getThreadPool()))
+//            .delayElements(Duration.ofSeconds(1))
+//            .map(x -> {
+//            printThread(x);
+//            return x;
+//            })
+//            .filter(num -> num % 2 == 0)
+//            .subscribe(System.out::println);
+//
+//            printThread("Waiting...");
+//            Thread.sleep(6_000);
+//            printThread("Completed");

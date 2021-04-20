@@ -72,6 +72,7 @@ const fetchItem$ = (id) => of(id).pipe(
 
 
     const btn = window.document.querySelector('button');
+
     fromEvent(btn, 'click').pipe(
         debounceTime(1000),
         switchMap(() =>

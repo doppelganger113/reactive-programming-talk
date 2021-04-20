@@ -4,7 +4,7 @@ class Observable {
     }
 
     subscribe(callable) {
-        this.callbacks.push(callable)
+        const index = this.callbacks.push(callable)
 
         return () => {
             console.log('Unsubscribed ' + index)
@@ -35,22 +35,16 @@ const writeToParagraph = (id) => {
     }
 }
 
-const listenForInput = (id, callback) => {
-    const el = window.document.getElementById(id)
-    el.addEventListener('input', (e) => {
-        callback(e)
-    })
-}
-
 (() => {
     let unsub2;
 
     const nameObserver = new Observable();
 
-    listenForInput("name", (e) => {
+    const el = window.document.querySelector('input')
+    el.addEventListener('input', (e) => {
         nameObserver.emit(e.target.value)
         if (e.target.value === "unsub") {
-            unsub2()
+            unsub2 && unsub2()
         }
     })
 
