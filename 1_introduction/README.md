@@ -6,13 +6,17 @@ _"Reactive programming is declarative programming paradigm concerned with data s
 
 ---
 
-Reactive programming as in it's named is focused on reactivity, on events and reacting for them, be it a button click,
-an interval clock ticking, multiple event source stream merge or backpressure to slow down the stream.
+Front-end development has changed after introduction of Single Page Application and brought more state management with 
+it, in this world of state, events are everywhere and this is where reactive programming comes.
+    
+Reactive programming as in it's named is focused on reactivity, on events and reacting to them, be it a button click,
+an interval clock ticking, HTTP request, multiple event source streams merge or backpressure handling.  
 
 ---
 
 ### Small example comparison
 
+Standard approach
 ```javascript
 let count = 0
 const rate = 1000
@@ -30,13 +34,14 @@ With RxJS
 
 ```javascript
 const button = document.querySelector('button')
-Rx.Observable.fromEvent(button, 'click').pipe(
+const clicks$ = Rx.Observable.fromEvent(button, 'click').pipe(
         throttleTime(1000),
         scan(count => count + 1, 0)
-    )
-    .subscribe(count => {
-        console.log(`Clicked ${count} times`)
-    })
+    );
+    
+clicks$.subscribe(count => {
+    console.log(`Clicked ${count} times`)
+})
 ```
 
 ---
@@ -59,14 +64,16 @@ Debounce operator
 
 ![Debounce operator](assets/debounce.png)
 
+---
+
 ## Under the hood
 
 To better understand and get started with reactive programming, it's important to know what's the underlying
-implementation.
-
-Reactive programming in its core is the observer pattern.
+implementation. Reactive programming in its core is just the observer pattern.
 
 ![Under the hood](./assets/observer_pattern.jpg)
+
+---
 
 ## Getting our hands dirty
 
@@ -76,6 +83,8 @@ The best way to learn is getting our hands dirty, so for that lets try the follo
 2. Create an input field in HTML that will write to 3 paragraphs as the user types and stop writing to the second
    paragraph if the user inputs "stop".
 3. Create operators for filtering and mapping of our custom observable stream data
+
+---
 
 ## Hot and cold observables
 

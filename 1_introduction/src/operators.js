@@ -49,7 +49,5 @@ const map = (fn) => new MapObservable(fn);
         map(x => x * 10),
         map(x => `You clicked ${x} times`)
     )
-        .subscribe(value => {
-            console.info(value)
-        })
+        .subscribe(console.info)
 })();

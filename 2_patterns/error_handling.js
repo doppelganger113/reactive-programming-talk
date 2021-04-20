@@ -1,10 +1,10 @@
 const {fromEvent, from, EMPTY, interval, throwError, timer, of} = rxjs;
 const {
     switchMap, catchError, flatMap, mergeMap, takeUntil, retry, concatMap, shareReplay, retryWhen,
-    tap, delayWhen
+    tap, delayWhen, debounce, debounceTime, timeout
 } = rxjs.operators;
 
-const getItem = (id) => {
+const getItem = (id, timeout = 2_000) => {
     return new Promise((resolve, reject) => {
         console.log(`Fetching item ${id}`)
         setTimeout(() => {
@@ -13,7 +13,7 @@ const getItem = (id) => {
                 return
             }
             resolve("Retrieved: " + id)
-        }, 2_000)
+        }, timeout)
     })
 }
 
@@ -49,24 +49,41 @@ const fetchItem$ = (id) => of(id).pipe(
 );
 
 (() => {
-    const observable = interval(1_000)
+    // const observable = interval(1_000)
+    //
+    // observable.pipe(
+    //     takeUntil(timer(15_000)),
+    //     switchMap((value) =>
+    //         fetchItem$(value).pipe(
+    //             catchError(err => {
+    //                 console.error('Failed retry on ' + value, err)
+    //                 return EMPTY;
+    //             })
+    //         )
+    //     ),
+    // )
+    //     .subscribe(value => {
+    //         console.log('Value', value)
+    //     }, err => {
+    //         console.error('Caught one!', err)
+    //     }, () => {
+    //         console.log('Done.')
+    //     })
 
-    observable.pipe(
-        takeUntil(timer(15_000)),
-        switchMap((value) =>
-            fetchItem$(value).pipe(
+
+    const btn = window.document.querySelector('button');
+    fromEvent(btn, 'click').pipe(
+        debounceTime(1000),
+        switchMap(() =>
+            from(getItem(1)).pipe(
+                timeout(2_500),
                 catchError(err => {
-                    console.error('Failed retry on ' + value, err)
-                    return EMPTY;
+                    return of([])
                 })
             )
-        ),
+        )
     )
-        .subscribe(value => {
-            console.log('Value', value)
-        }, err => {
-            console.error('Caught one!', err)
-        }, () => {
-            console.log('Done.')
+        .subscribe((value) => {
+            console.info('Clicked!', value)
         })
 })();
