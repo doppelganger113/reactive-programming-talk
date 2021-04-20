@@ -5,10 +5,22 @@ class Observable {
 
     subscribe(callable) {
         this.callbacks.push(callable)
+
+        return () => {
+            console.log('Unsubscribed ' + index)
+            this.callbacks.splice(index, 1)
+        }
     }
 
     emit(value) {
         this.callbacks.forEach(cb => cb(value))
+    }
+
+    pipe(...obs) {
+        return obs.reduce((acc, o) => {
+            acc.subscribe(o.emit.bind(o))
+            return o
+        }, this)
     }
 }
 
@@ -21,6 +33,13 @@ const writeToParagraph = (id) => {
     return value => {
         el.innerHTML = value
     }
+}
+
+const listenForInput = (id, callback) => {
+    const el = window.document.getElementById(id)
+    el.addEventListener('input', (e) => {
+        callback(e)
+    })
 }
 
 (() => {

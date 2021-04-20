@@ -17,6 +17,7 @@ const getItem = (id) => {
     })
 }
 
+// Creating observable via rxjs library
 (() => {
     const observable = rxjs.Observable.create(observer => {
         observer.next("Hello")
@@ -52,7 +53,7 @@ const fetchItem$ = (id) => of(id).pipe(
 
     observable.pipe(
         takeUntil(timer(15_000)),
-        flatMap((value) =>
+        switchMap((value) =>
             fetchItem$(value).pipe(
                 catchError(err => {
                     console.error('Failed retry on ' + value, err)

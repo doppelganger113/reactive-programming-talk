@@ -1,39 +1,5 @@
 const isOdd = x => x % 2 === 0;
 
-const listenForInput = (id, callback) => {
-    const el = window.document.getElementById(id)
-    el.addEventListener('input', (e) => {
-        callback(e)
-    })
-}
-
-
-class Observable {
-    constructor() {
-        this.callbacks = []
-    }
-
-    subscribe(callable) {
-        const index = this.callbacks.push(callable) - 1
-        return () => {
-            console.log('Unsubscribed ' + index)
-            this.callbacks.splice(index, 1)
-        }
-    }
-
-    emit(value) {
-        this.callbacks.forEach(cb => cb(value))
-    }
-
-    pipe(...obs) {
-        return obs.reduce((acc, o) => {
-            acc.subscribe(o.emit.bind(o))
-            return o
-        }, this)
-    }
-}
-
-
 class FilterObservable {
     constructor(predicate) {
         this.predicate = predicate

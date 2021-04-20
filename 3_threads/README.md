@@ -1,11 +1,11 @@
-# Blocking and Non-Blocking I/O
+# What about threads?
 
 Most server applications are in threaded model, but recently due to increase in scalability demand
 they are not enough for high concurrency.
 
 ---
 
-## Blocking and non-blocking server concurrency
+## Blocking and Non-Blocking I/O
 
 Traditional threaded model serves each request with its own thread. Threads are costly in memory and have a 
 hard limit on the number of threads based on the machine memory. Usually when a request has finished, the thread is
